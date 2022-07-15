@@ -1,6 +1,6 @@
 const User = require('../models/User');         // importation du model (email + password)
 const bcrypt = require('bcrypt');               // Utilisation du plugin bcrypt
-
+const jwt = require('jsonwebtoken');            // Importation du plugin de génération token        
 
 
 exports.signup = (req, res, next) => {      // logique de la route signup avant exportation dans le routeur
@@ -29,9 +29,13 @@ exports.login = (req, res, next) => {
                 if (!valid){                                    // Si la réponse n'est pas valid (les deux hashs ne correspondent pas)
                     res.status(401).json({ message: 'Paire identifiant/mot de passe incorrecte'})
                 }else{                                          // Si les hash correspondent
-                    res.status(200).json({
-                        userId: user._id,                          // Ici le user id correspond a l'id crée automatiquement par mongoDB
-                        token: 'TOKEN'
+                    res.status(200).json({                          // Si valid :
+                        userId: user._id,                           // renvoie le user id généré par mongoDB + un token
+                        token: jwt.sign(                            //  création du TOKEN
+                            { userId: user._id },                   // premier argument séléction de la chose a encodé ici l'id généré par mongo DB cela permet de fixer des droits par rapport a un utilisateur
+                            'jX0EX4ik6^G1!xsY5$9Ur2*!26Wv',         // clé secrete pour l'encodage
+                            { expiresIn: '24h' }                    // expiration en 24h
+                        )
                     });
                 }
             })                                             // Nous devons comparer les deux hash pour valider l'authentification
