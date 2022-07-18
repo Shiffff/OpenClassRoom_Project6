@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');            // Importation du plugin de gén
 
 
 exports.signup = (req, res, next) => {      // logique de la route signup avant exportation dans le routeur
-    bcrypt.hash(req.body.password, 15)      // utilisation du plugin bcrypt (créer un hash du password (utilisation de l'algo 15 fois = salage du mot de passe))
+    bcrypt.hash(req.body.password, 10)      // utilisation du plugin bcrypt (créer un hash du password (utilisation de l'algo 15 fois = salage du mot de passe))
     .then(hash => {                         // recupération du hash pour :
         const user = new User({             // nouvelle instance du schema user
             email: req.body.email,          // séléction du champ "email" dans le body de la requete
@@ -33,7 +33,7 @@ exports.login = (req, res, next) => {
                         userId: user._id,                           // renvoie le user id généré par mongoDB + un token
                         token: jwt.sign(                            //  création du TOKEN
                             { userId: user._id },                   // premier argument séléction de la chose a encodé ici l'id généré par mongo DB cela permet de fixer des droits par rapport a un utilisateur
-                            'jX0EX4ik6^G1!xsY5$9Ur2*!26Wv',         // clé secrete pour l'encodage
+                            'RANDOM_TOKEN_SECRET',         // clé secrete pour l'encodage
                             { expiresIn: '24h' }                    // expiration en 24h
                         )
                     });
