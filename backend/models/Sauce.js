@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose');   
 
-const sauceSchema = mongoose.Schema({
+const sauceSchema = mongoose.Schema({              // création d'une nouvelle sauce avec des défault like + des tableau vide pour les futurs users qui aurait like ou deslike le produit                      
     userId: { type: String},
     name: { type: String},
     manufacturer: { type: String},
