@@ -9,9 +9,9 @@ const sauceSchema = mongoose.Schema({              // création d'une nouvelle s
     imageUrl: { type: String},
     heat:{ type: Number},
     //gestion des likes et dislikes
-    likes:  { type: Number, 'default': 0 },
+    likes:  { type: Number, 'default': 0 },             // J'initialise les like dislike a 0
     dislikes: { type: Number, 'default': 0 },
-    usersLiked: { type: Array, 'default': [] },
+    usersLiked: { type: Array, 'default': [] },         // Je crée un array vide dans le schema pour stocké les id des personne aillant like/dislike
     usersDisliked: { type: Array, 'default': [] }
 });
 module.exports = mongoose.model('Sauce', sauceSchema);
