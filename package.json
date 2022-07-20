@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "express-mongo-sanitize": "^2.2.0",
+    "helmet": "^5.1.0"
+  }
+}

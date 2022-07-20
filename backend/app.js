@@ -12,6 +12,11 @@ const path = require('path');       // gére les chemins d'accées au fichier
 
 var cors = require('cors')      //Gere le pb de cors (ystème de sécurité qui, par défaut, bloque les appels HTTP entre des serveurs différents)
 
+const helmet = require('helmet') // définie et peu caché certaines information dans les en-têtes HTTP
+
+const mongoSanitize = require('express-mongo-sanitize');
+
+
 require('dotenv').config();
 
 
@@ -30,7 +35,7 @@ mongoose.connect(`mongodb+srv://${process.env.id}:${process.env.password}@projec
 app.use('/images', express.static(path.join(__dirname, 'images')));       // route static pour les images DL
 app.use('/api/sauces', stuffRoutes); //  importation des routeurs
 app.use('/api/auth', userRoutes);   // 
-
-
+app.use(helmet());
+app.use(mongoSanitize());
 
 module.exports = app;
