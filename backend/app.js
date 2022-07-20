@@ -12,9 +12,11 @@ const path = require('path');       // gére les chemins d'accées au fichier
 
 var cors = require('cors')      //Gere le pb de cors (ystème de sécurité qui, par défaut, bloque les appels HTTP entre des serveurs différents)
 
+require('dotenv').config();
 
 
-mongoose.connect('mongodb+srv://shiffff:TtGWLWenXvOCJkOJ@project6.xmioux6.mongodb.net/?retryWrites=true&w=majority',      // connection a la base de données
+
+mongoose.connect(`mongodb+srv://${process.env.id}:${process.env.password}@project6.xmioux6.mongodb.net/?retryWrites=true&w=majority`,      // connection a la base de données
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))

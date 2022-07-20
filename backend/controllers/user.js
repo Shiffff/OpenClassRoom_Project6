@@ -1,6 +1,7 @@
 const User = require('../models/User');         // importation du model (email + password)
 const bcrypt = require('bcrypt');               // Utilisation du plugin bcrypt
 const jwt = require('jsonwebtoken');            // Importation du plugin de génération token        
+require('dotenv').config();
 
 
 exports.signup = (req, res, next) => {      // logique de la route signup avant exportation dans le routeur
@@ -33,7 +34,7 @@ exports.login = (req, res, next) => {
                         userId: user._id,                           // renvoie le user id généré par mongoDB + un token
                         token: jwt.sign(                            //  création du TOKEN
                             { userId: user._id },                   // premier argument séléction de la chose a encodé ici l'id généré par mongo DB cela permet de fixer des droits par rapport a un utilisateur
-                            'TJHQK4FTHDV4VD9C',         // clé secrete pour l'encodage
+                            `${process.env.key}`,         // clé secrete pour l'encodage
                             { expiresIn: '24h' }                    // expiration en 24h
                         )
                     });
