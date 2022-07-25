@@ -1,6 +1,6 @@
 const express = require('express'); // Importation 'express' pour crée l'app
 
-const app = express(); //constante pour appeler 'express'
+const app = express(); //appel 'express'
 
 const mongoose = require('mongoose'); //package qui facilite les interactions avec notre base de données MongoDB
 
