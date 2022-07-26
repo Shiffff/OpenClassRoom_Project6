@@ -34,7 +34,7 @@ exports.login = (req, res, next) => {
                         userId: user._id,                           // renvoie le user id généré par mongoDB + un token
                         token: jwt.sign(                            //  création du TOKEN
                             { userId: user._id },                   // premier argument séléction de la chose a encodé ici l'id généré par mongo DB cela permet de fixer des droits par rapport a un utilisateur
-                            `${process.env.key}`,         // clé secrete pour l'encodage
+                            `${process.env.KEY}`,         // clé secrete pour l'encodage
                             { expiresIn: '24h' }                    // expiration en 24h
                         )
                     });

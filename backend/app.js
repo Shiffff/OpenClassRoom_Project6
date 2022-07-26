@@ -22,7 +22,7 @@ require('dotenv').config();         // variable d'environement ( stockage local 
 
 
 
-mongoose.connect(`mongodb+srv://${process.env.id}:${process.env.password}@project6.xmioux6.mongodb.net/?retryWrites=true&w=majority`,      // connection a la base de données
+mongoose.connect(`mongodb+srv://${process.env.ID}:${process.env.PASSWORD}@${process.env.DB_NAME}.mongodb.net/?retryWrites=true&w=majority`,      // connection a la base de données
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
