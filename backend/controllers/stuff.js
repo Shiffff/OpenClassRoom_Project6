@@ -31,12 +31,29 @@ exports.getOneSauces = (req, res, next) => {                  //get une seul sau
 
 
 
-exports.putSauces = (req, res, next) => {                     // Modif d'une sauce
-    Sauce.updateOne({ _id: req.params.id}, {...req.body, _id: req.params.id})     // comme juste en haut on séléctionne une sauce, puis on "l'update" on récupére le champs des formulaire via et on vérif l'id
-      .then(() => res.status(200).json({ message: 'objet modifié !'}))
-      .catch(error => res.status(400).json({ error }));
-  };                                                                                 
+exports.putSauces = (req, res, next) => {
+    const sauceObject = req.file ? {
+        ...JSON.parse(req.body.sauce),
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    } : { ...req.body };
+  
+    delete sauceObject._userId;
+    Sauce.findOne({_id: req.params.id})
+        .then((sauce) => {
+            if (sauce.userId != req.auth.userId) {
+                res.status(401).json({ message : 'Not authorized'});
+            } else {
+                Sauce.updateOne({ _id: req.params.id}, { ...sauceObject, _id: req.params.id})
+                .then(() => res.status(200).json({message : 'Objet modifié!'}))
+                .catch(error => res.status(401).json({ error }));
+            }
+        })
+        .catch((error) => {
+            res.status(400).json({ error });
+        });
+ };
 
+ 
   exports.deleteSauces = (req, res, next) => {          //Delete une sauce
     Sauce.findOne({ _id: req.params.id})
         .then(sauce => {
