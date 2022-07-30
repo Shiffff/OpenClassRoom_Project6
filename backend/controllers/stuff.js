@@ -1,6 +1,6 @@
 const Sauce = require('../models/Sauce');
 const fs = require ('fs');
-
+const path = require("path");
 
 exports.createSauce = (req, res, next) => {     // création de la logique de la route createSauce
   const sauceObject = JSON.parse(req.body.sauce);       // Recuperation de la requete post
@@ -30,28 +30,26 @@ exports.getOneSauces = (req, res, next) => {                  //get une seul sau
 };
 
 
-
 exports.putSauces = (req, res, next) => {
-    const sauceObject = req.file ? {
-        ...JSON.parse(req.body.sauce),
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    } : { ...req.body };
-  
-    delete sauceObject._userId;
-    Sauce.findOne({_id: req.params.id})
-        .then((sauce) => {
-            if (sauce.userId != req.auth.userId) {
-                res.status(401).json({ message : 'Not authorized'});
-            } else {
-                Sauce.updateOne({ _id: req.params.id}, { ...sauceObject, _id: req.params.id})
-                .then(() => res.status(200).json({message : 'Objet modifié!'}))
-                .catch(error => res.status(401).json({ error }));
-            }
-        })
-        .catch((error) => {
-            res.status(400).json({ error });
-        });
- };
+    if (req.file) {
+        Sauce.findOne({ _id: req.params.id })
+            .then(sauce => {
+                const filename = sauce.imageUrl.split('/images/')[1];
+                fs.unlink(`images/${filename}`, () => {});
+            })
+            .catch(error => res.status(500).json({ error }));
+    }
+    const sauceObject = req.file ?
+        {    
+            ...JSON.parse(req.body.sauce),
+            imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        } : { ...req.body };
+        Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+            .then(() => res.status(200).json({ message: 'La sauce a été modifiée!'}))
+            .catch(error => res.status(400).json({ error }));
+};
+
+
 
  
   exports.deleteSauces = (req, res, next) => {          //Delete une sauce
@@ -137,3 +135,5 @@ exports.putSauces = (req, res, next) => {
           break;
   }
 };                                                                              
+
+
